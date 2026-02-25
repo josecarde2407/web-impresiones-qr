@@ -46,68 +46,54 @@ button {
 <button onclick="clearField()">Limpiar</button>
 
 <div id="reader"></div>
-<div id="camWarning" style="color:red; display:none">
-⚠ Cámara no disponible. Use ingreso manual.
-</div>
 
 <script>
-const input = document.getElementById('textInput');
+let scanner = null;
 
-// Detectar soporte de cámara
-function cameraSupported() {
-    return !!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia);
+function startScanner() {
+    const reader = document.getElementById("reader");
+    reader.innerHTML = "";
+
+    scanner = new Html5Qrcode("reader");
+
+    scanner.start(
+        { facingMode: "environment" }, // cámara trasera
+        { fps: 10, qrbox: 250 },
+        (decodedText) => {
+            document.getElementById("textInput").value = decodedText;
+
+            // detener cámara
+            scanner.stop();
+
+            // OPCIONAL: imprimir automático
+            // printQR();
+        },
+        (err) => {}
+    );
 }
 
-// Mostrar aviso si no hay soporte
-window.addEventListener('load', () => {
-    if (!cameraSupported()) {
-        alert('⚠️ Este navegador no soporta acceso a cámara.\nPuedes ingresar el código manualmente.');
-    }
-});
-
-// Función para abrir cámara
-async function startScanner() {
-    if (!cameraSupported()) {
-        
-        alert('Cámara no soportada en este navegador.');
-        return;
-    }
-
-    try {
-        const stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: 'environment' } });
-        alert('Cámara disponible. Aquí puedes integrar lector QR.');
-        stream.getTracks().forEach(t => t.stop()); // cerrar cámara
-    } catch (err) {
-        alert('No se pudo acceder a la cámara: ' + err.message);
-    }
-}
-
-// Imprimir
 function printQR() {
-    const text = input.value;
-    if (!text) return;
+    const text = document.getElementById('textInput').value;
+    if (!text) return alert("Ingrese o escanee un código");
 
     fetch('/print', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ text })
     })
-        .then(r => r.text())
-        .then(msg => {
-            alert(msg);
-            clearField();
-        })
-        .catch(e => alert(e.message));
+    .then(r => r.text())
+    .then(msg => {
+        alert(msg);
+        clearField();
+    })
+    .catch(err => alert(err));
 }
 
 function clearField() {
-    input.value = '';
-    document.getElementById('qrcode').innerHTML = '';
+    document.getElementById('textInput').value = '';
+    document.getElementById('reader').innerHTML = '';
 }
 </script>
 
 </body>
 </html>
-
-
-
