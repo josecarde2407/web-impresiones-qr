@@ -61,6 +61,7 @@ function cameraSupported() {
 // Mostrar aviso si no hay soporte
 window.addEventListener('load', () => {
     if (!cameraSupported()) {
+        document.getElementById('camWarning').style.display = 'block';
         alert('⚠️ Este navegador no soporta acceso a cámara.\nPuedes ingresar el código manualmente.');
     }
 });
@@ -68,7 +69,7 @@ window.addEventListener('load', () => {
 // Función para abrir cámara
 async function startScanner() {
     if (!cameraSupported()) {
-        document.getElementById('camWarning').style.display = 'block';
+        
         alert('Cámara no soportada en este navegador.');
         return;
     }
@@ -108,4 +109,5 @@ function clearField() {
 
 </body>
 </html>
+
 
