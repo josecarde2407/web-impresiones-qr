@@ -31,6 +31,3 @@ Aplicación web para generar códigos QR a partir de texto ingresado por el usua
 
 - QRCode: Librería para generar códigos QR en el cliente.
 
-updates
-
-Se modifico el fronted para que soporte escan por camara en caso el usuario no requiera digitar directamente el texto.
