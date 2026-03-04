@@ -4,88 +4,144 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Generador de QR e Impresión</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            max-width: 600px;
-            margin: 0 auto;
-            padding: 20px;
-            background-color: #f4f4f4;
-        }
-
-        h1 {
-            color: #333;
-            text-align: center;
-        }
-
-        input[type="text"] {
-            width: 100%;
-            padding: 10px;
-            margin: 10px 0;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        button {
-            background-color: #4CAF50;
-            color: white;
-            padding: 10px 20px;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            margin: 5px;
-        }
-
-        button:hover {
-            background-color: #45a049;
-        }
-
-        #qrcode {
-            margin: 20px 0;
-            text-align: center;
-        }
-    </style>
+    <title>Sistema de Impresión QR</title>
+    <link rel="stylesheet" href="styles.css">
 </head>
 
 <body>
-    <h1>Generar Etiqueta e Imprimir</h1>
-    <input type="text" id="textInput" placeholder="Ingresa en formato: LETRA-UBICACION-NIVEL-PROFUNDIDAD">
-    <button onclick="clearField()">Limpiar</button>
-    <div id="qrcode"></div>
-    <button onclick="printQR()">Imprimir</button>
+
+    <!-- 🔵 BOTÓN FLOTANTE -->
+    <button class="mode-toggle" onclick="toggleMode()">🌙</button>
+
+    <h1>Sistema de Impresión QR</h1>
+    <div class="version">Versión 2.0 | Sistema Mejorado</div>
+
+   <div class="card">
+
+    <h3 class="card-title">Seleccionar impresora</h3>
+
+    <div class="radio-group">
+        <label class="radio-card">
+            <input type="radio" name="printer" value="recepcion" checked>
+            <span class="radio-content">
+                🖨️ RECEPCIÓN
+            </span>
+        </label>
+
+        <label class="radio-card">
+            <input type="radio" name="printer" value="pt">
+            <span class="radio-content">
+                📦 PRODUCTO TERMINADO
+            </span>
+        </label>
+    </div>
+
+    <label for="textInput" class="input-label">
+        Código (Formato obligatorio: L1-MP1-001-001-001-001)
+    </label>
+
+    <input type="text"
+           id="textInput"
+           class="text-input"
+           placeholder="Ejemplo: L1-MP1-001-001-001-001"
+           autocomplete="off">
+
+    <div class="buttons">
+        <button class="clear-btn" onclick="clearField()">Limpiar</button>
+        <button id="printButton" class="print-btn" onclick="printQR()">Imprimir</button>
+    </div>
+
+    <div id="statusMessage" class="status"></div>
+
+</div>
+
+    <div class="footer">
+        Sistema Interno de Impresión QR © 2026
+    </div>
+
+    <div class="cc-text">
+        Creative Commons
+    </div>
 
     <script>
-        function printQR() {
-            const text = document.getElementById('textInput').value;
-            if (!text) return;
-            fetch('/print', {
-                method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
-                body: JSON.stringify({ text })
-            })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error('Error en la impresión: ' + response.statusText);
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    alert(data);
-                    clearField(); // Limpiar después de imprimir
-                })
-                .catch(error => {
-                    console.error('Error:', error);
-                    alert('Error al imprimir: ' + error.message);
-                });
+        function toggleMode() {
+            document.body.classList.toggle("dark");
         }
 
         function clearField() {
-            document.getElementById('textInput').value = '';
-            document.getElementById('qrcode').innerHTML = '';
+            document.getElementById("textInput").value = "";
+            document.getElementById("statusMessage").innerHTML = "";
+        }
+
+        function validateFormat(text) {
+            const parts = text.split("-");
+            return parts.length === 6;
+        }
+
+        document.getElementById("textInput")
+            .addEventListener("keypress", function (e) {
+                if (e.key === "Enter") {
+                    printQR();
+                }
+            });
+
+        async function printQR() {
+            const text = document.getElementById("textInput").value.trim();
+            const printer = document.querySelector('input[name="printer"]:checked').value;
+            const status = document.getElementById("statusMessage");
+            const printButton = document.getElementById("printButton");
+
+            status.innerHTML = "";
+            status.className = "status";
+
+            if (!text) {
+                status.innerHTML = "⚠️ Debes ingresar un código";
+                status.className = "status error";
+                return;
+            }
+
+            if (!validateFormat(text)) {
+                status.innerHTML = "⚠️ Formato inválido (6 bloques separados por -)";
+                status.className = "status error";
+                return;
+            }
+
+            try {
+                status.innerHTML = "⏳ Enviando a impresora...";
+                printButton.disabled = true;
+
+                const response = await fetch("/print", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        printer: printer,
+                        text: text
+                    })
+                });
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(errorText);
+                }
+
+                const result = await response.text();
+
+                status.innerHTML = "✅ " + result;
+                status.className = "status success";
+                clearField();
+
+            } catch (error) {
+                status.innerHTML = "❌ Error: " + error.message;
+                status.className = "status error";
+            }
+
+            setTimeout(() => {
+                printButton.disabled = false;
+            }, 2000);
         }
     </script>
+
 </body>
-
 </html>
-
