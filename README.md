@@ -31,11 +31,13 @@ Aplicación web para generar códigos QR a partir de texto ingresado por el usua
 
 - QRCode: Librería para generar códigos QR en el cliente.
 
+## Actualizacion visual añadiendo radio button , modo oscuro / claro , adicional de una impresora de otra zona, tambien se agrego un variable para agregar mas impresoras desde el server.js segun requiera el usuario.
 
 ## cd "C:\Users\dstef\Downloads\web-impresiones-qr-main"
  npm install
  node server.js
  
+
 
 
 
