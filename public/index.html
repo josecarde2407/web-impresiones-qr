@@ -1,147 +1,251 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sistema de Impresión QR</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Sistema de Impresión QR - Almacén</title>
+    <style>
+        :root {
+            --primary: #4a90e2;
+            --success: #48bb78;
+            --danger: #f56565;
+            --bg: #f4f7f6;
+            --card: #ffffff;
+            --text: #1a202c;
+            --border: #cbd5e0;
+            --input-bg: #ffffff;
+        }
+
+        body.dark-mode {
+            --bg: #000000;
+            --card: #121212;
+            --text: #ffffff;
+            --border: #444444;
+            --input-bg: #1a1a1a;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, sans-serif;
+            margin: 0; padding: 20px; display: flex; flex-direction: column;
+            align-items: center; background-color: var(--bg); color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        /* NOTIFICACIÓN FLOTANTE (TOAST) */
+        #toast {
+            position: fixed; top: 25px; right: -350px;
+            background: var(--card); color: var(--text);
+            padding: 16px 24px; border-radius: 12px;
+            box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+            border-left: 8px solid var(--primary);
+            transition: all 0.5s cubic-bezier(0.68, -0.55, 0.265, 1.55); 
+            z-index: 9999; font-weight: 600;
+            display: flex; align-items: center; gap: 12px;
+            border: 1px solid var(--border);
+        }
+        #toast.show { right: 25px; }
+        #toast.error { border-left-color: var(--danger); }
+        #toast.success { border-left-color: var(--success); }
+        #toast.info { border-left-color: var(--primary); }
+
+        .mode-toggle {
+            position: absolute; top: 20px; right: 20px;
+            background: var(--card); border: 2px solid var(--primary);
+            border-radius: 50%; width: 45px; height: 45px; cursor: pointer;
+            font-size: 20px; display: flex; align-items: center; justify-content: center;
+            color: var(--text); box-shadow: 0 4px 10px rgba(0,0,0,0.2);
+        }
+
+        .card {
+            background-color: var(--card); border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1); padding: 30px;
+            width: 100%; max-width: 500px; margin-top: 50px; border: 1px solid var(--border);
+        }
+
+        h1 { margin-bottom: 5px; color: var(--primary); text-align: center; }
+        .version { font-size: 0.8rem; opacity: 0.6; text-align: center; margin-bottom: 25px; }
+        .card-title { font-size: 1.1rem; font-weight: bold; margin-bottom: 15px; display: block; border-left: 5px solid var(--primary); padding-left: 12px; }
+
+        .radio-group { display: flex; gap: 15px; margin-bottom: 25px; }
+        .radio-card { flex: 1; cursor: pointer; }
+        .radio-card input { display: none; }
+        .radio-content { display: block; padding: 12px; text-align: center; border: 2px solid var(--border); border-radius: 10px; font-weight: bold; transition: 0.2s; }
+        .radio-card input:checked + .radio-content { border-color: var(--primary); background-color: rgba(74, 144, 226, 0.15); color: var(--primary); }
+
+        .text-input { width: 100%; padding: 14px; border: 1px solid var(--border); border-radius: 10px; background-color: var(--input-bg); color: var(--text); font-size: 1rem; box-sizing: border-box; margin-bottom: 20px; outline: none; }
+        .text-input:focus { border-color: var(--primary); }
+
+        .btn { width: 100%; padding: 15px; border: none; border-radius: 10px; font-size: 1rem; font-weight: 800; cursor: pointer; transition: 0.2s; margin-bottom: 12px; color: white; text-transform: uppercase; }
+        .btn-print { background-color: var(--success); }
+        .btn-clear { background-color: var(--danger); }
+        .btn-batch { background: linear-gradient(135deg, #4a90e2, #357abd); }
+        .btn:active { transform: scale(0.96); }
+        .btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+        .status { margin-top: 20px; padding: 15px; border-radius: 10px; text-align: center; font-weight: bold; display: none; border: 1px solid transparent; }
+        .success-box { display: block; background-color: rgba(72, 187, 120, 0.1); color: var(--success); border-color: var(--success); }
+        .error-box { display: block; background-color: rgba(245, 101, 101, 0.1); color: var(--danger); border-color: var(--danger); }
+
+        hr { border: 0; border-top: 1px solid var(--border); margin: 25px 0; }
+    </style>
 </head>
+<body class="dark-mode">
 
-<body>
-
-    <!-- 🔵 BOTÓN FLOTANTE -->
-    <button class="mode-toggle" onclick="toggleMode()">🌙</button>
-
+    <div id="toast"></div>
+    <button class="mode-toggle" id="themeBtn">☀️</button>
+    
     <h1>Sistema de Impresión QR</h1>
-    <div class="version">Versión 2.0 | Sistema Mejorado</div>
+    <div class="version">v5.0 | Edición Segura (Backend-Only)</div>
 
-   <div class="card">
+    <div class="card">
+        <span class="card-title">Destino de Impresión</span>
+        <div class="radio-group">
+            <label class="radio-card">
+                <input type="radio" name="printer" value="recepcion" checked>
+                <span class="radio-content">🖨️ RECEPCIÓN</span>
+            </label>
+            <label class="radio-card">
+                <input type="radio" name="printer" value="pt">
+                <span class="radio-content">📦 PT</span>
+            </label>
+        </div>
 
-    <h3 class="card-title">Seleccionar impresora</h3>
+        <hr>
 
-    <div class="radio-group">
-        <label class="radio-card">
-            <input type="radio" name="printer" value="recepcion" checked>
-            <span class="radio-content">
-                🖨️ RECEPCIÓN
-            </span>
-        </label>
+        <label style="display:block;margin-bottom:8px;font-weight:600;font-size:0.9rem;">Código de Ubicación</label>
+        <input type="text" id="textInput" class="text-input" placeholder="L1-MP1-RCK-POS-NIV-PROF" autocomplete="off">
+        <button class="btn btn-print" id="btnIndividual" onclick="printQR()">IMPRIMIR AHORA</button>
 
-        <label class="radio-card">
-            <input type="radio" name="printer" value="pt">
-            <span class="radio-content">
-                📦 PRODUCTO TERMINADO
-            </span>
-        </label>
-    </div>
+        <hr>
 
-    <label for="textInput" class="input-label">
-        Código (Formato obligatorio: L1-MP1-001-001-001-001)
-    </label>
+        <span class="card-title">Selección por Lotes</span>
+        <label style="display:block;margin-bottom:8px;font-weight:600;font-size:0.9rem;">Rack</label>
+        <select id="rackSelect" class="text-input">
+            <option value="">-- Seleccionar rack --</option>
+        </select>
 
-    <input type="text"
-           id="textInput"
-           class="text-input"
-           placeholder="Ejemplo: L1-MP1-001-001-001-001"
-           autocomplete="off">
+        <label style="display:block;margin-bottom:8px;font-weight:600;font-size:0.9rem;">Sección</label>
+        <select id="sectionSelect" class="text-input">
+            <option value="">-- Seleccionar sección --</option>
+        </select>
 
-    <div class="buttons">
-        <button class="clear-btn" onclick="clearField()">Limpiar</button>
-        <button id="printButton" class="print-btn" onclick="printQR()">Imprimir</button>
-    </div>
+        <div style="display: flex; gap: 12px; margin-top: 10px;">
+            <button class="btn btn-clear" onclick="clearField()" style="flex: 1;">LIMPIAR</button>
+            <button class="btn btn-batch" onclick="imprimirSeccion()" style="flex: 2;">IMPRIMIR LOTE</button>
+        </div>
 
-    <div id="statusMessage" class="status"></div>
-
-</div>
-
-    <div class="footer">
-        Sistema Interno de Impresión QR © 2026
-    </div>
-
-    <div class="cc-text">
-        Creative Commons
+        <div id="statusMessage" class="status"></div>
     </div>
 
     <script>
-        function toggleMode() {
-            document.body.classList.toggle("dark");
+        let todasUbicaciones = [];
+
+        function showToast(msg, type = 'success') {
+            const toast = document.getElementById('toast');
+            let icon = type === 'success' ? '✅ ' : (type === 'error' ? '❌ ' : '⌛ ');
+            toast.innerHTML = icon + msg;
+            toast.className = 'show ' + type;
+            setTimeout(() => { toast.className = ''; }, 3500);
         }
+
+        const themeBtn = document.getElementById('themeBtn');
+        themeBtn.addEventListener('click', () => {
+            document.body.classList.toggle('dark-mode');
+            themeBtn.innerHTML = document.body.classList.contains('dark-mode') ? "☀️" : "🌙";
+        });
 
         function clearField() {
             document.getElementById("textInput").value = "";
-            document.getElementById("statusMessage").innerHTML = "";
+            document.getElementById("rackSelect").selectedIndex = 0;
+            document.getElementById("sectionSelect").innerHTML = '<option value="">-- Seleccionar sección --</option>';
+            document.getElementById("statusMessage").style.display = "none";
+            showToast("Vista restablecida", "info");
         }
 
-        function validateFormat(text) {
-            const parts = text.split("-");
-            return parts.length === 6;
+        async function cargarDatos() {
+            try {
+                const response = await fetch("/ubicaciones.json");
+                todasUbicaciones = await response.json();
+                const racks = [...new Set(todasUbicaciones.map(u => u.split("-").slice(0, 3).join("-")))];
+                const select = document.getElementById("rackSelect");
+                racks.forEach(r => {
+                    const opt = document.createElement("option");
+                    opt.value = r; opt.textContent = r;
+                    select.appendChild(opt);
+                });
+            } catch (e) { showToast("Error al cargar base de datos", "error"); }
         }
 
-        document.getElementById("textInput")
-            .addEventListener("keypress", function (e) {
-                if (e.key === "Enter") {
-                    printQR();
-                }
-            });
+        document.getElementById("rackSelect").addEventListener("change", function() {
+            const rack = this.value;
+            const secSelect = document.getElementById("sectionSelect");
+            secSelect.innerHTML = '<option value="">-- Seleccionar sección --</option>';
+            if (rack) {
+                const secciones = [...new Set(todasUbicaciones.filter(u => u.startsWith(rack)).map(u => u.split("-").slice(0, 4).join("-")))];
+                secciones.forEach(s => {
+                    const opt = document.createElement("option");
+                    opt.value = s; opt.textContent = s;
+                    secSelect.appendChild(opt);
+                });
+            }
+        });
 
-        async function printQR() {
-            const text = document.getElementById("textInput").value.trim();
-            const printer = document.querySelector('input[name="printer"]:checked').value;
+        async function enviarPeticion(payload) {
             const status = document.getElementById("statusMessage");
-            const printButton = document.getElementById("printButton");
-
-            status.innerHTML = "";
-            status.className = "status";
-
-            if (!text) {
-                status.innerHTML = "⚠️ Debes ingresar un código";
-                status.className = "status error";
-                return;
-            }
-
-            if (!validateFormat(text)) {
-                status.innerHTML = "⚠️ Formato inválido (6 bloques separados por -)";
-                status.className = "status error";
-                return;
-            }
+            status.innerHTML = "⌛ Comunicando con el servidor...";
+            status.className = "status success-box"; 
+            status.style.display = "block";
+            showToast("Enviando orden...", "info");
 
             try {
-                status.innerHTML = "⏳ Enviando a impresora...";
-                printButton.disabled = true;
-
-                const response = await fetch("/print", {
+                const res = await fetch("/print-multiple", {
                     method: "POST",
-                    headers: {
-                        "Content-Type": "application/json"
-                    },
-                    body: JSON.stringify({
-                        printer: printer,
-                        text: text
-                    })
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify(payload)
                 });
-
-                if (!response.ok) {
-                    const errorText = await response.text();
-                    throw new Error(errorText);
+                const msg = await res.text();
+                if (res.ok) {
+                    status.innerHTML = "✅ " + msg;
+                    showToast("Proceso completado", "success");
+                } else {
+                    status.innerHTML = "❌ " + msg;
+                    status.className = "status error-box";
+                    showToast(msg, "error");
                 }
-
-                const result = await response.text();
-
-                status.innerHTML = "✅ " + result;
-                status.className = "status success";
-                clearField();
-
-            } catch (error) {
-                status.innerHTML = "❌ Error: " + error.message;
-                status.className = "status error";
+            } catch (e) {
+                status.innerHTML = "❌ Error crítico de red";
+                status.className = "status error-box";
+                showToast("No hay conexión con el servidor", "error");
             }
-
-            setTimeout(() => {
-                printButton.disabled = false;
-            }, 2000);
         }
-    </script>
 
+        function validarFormato(texto) {
+            return texto.split('-').length >= 6;
+        }
+
+        function printQR() {
+            const val = document.getElementById("textInput").value.trim();
+            const printer = document.querySelector('input[name="printer"]:checked').value;
+            
+            if (!val) return showToast("⚠️ Ingrese un código", "error");
+            
+            // Bloqueo preventivo en el cliente
+            if (!validarFormato(val)) {
+                return showToast("⚠️ El formato debe ser: L1-MP1-RCK-POS-NIV-PROF", "error");
+            }
+            
+            enviarPeticion({ printer, textos: [val] });
+        }
+
+        function imprimirSeccion() {
+            const sec = document.getElementById("sectionSelect").value;
+            const printer = document.querySelector('input[name="printer"]:checked').value;
+            if (!sec) return showToast("⚠️ Seleccione una sección válida", "error");
+            const lista = todasUbicaciones.filter(u => u.startsWith(sec));
+            enviarPeticion({ printer, textos: lista });
+        }
+
+        cargarDatos();
+    </script>
 </body>
 </html>
