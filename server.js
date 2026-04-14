@@ -13,7 +13,7 @@ app.use(express.static('public'));
    CONFIGURACIÓN PRIVADA (OCULTA AL FRONTEND)
    ========================================================== */
 const printers = {
-    recepcion: { ip: '10.155.158.200', port: 9100, nombre: 'REPCIÓN' },
+    recepcion: { ip: '10.155.158.38', port: 9100, nombre: 'REPCIÓN' },
     pt: { ip: '10.155.158.201', port: 9100, nombre: 'PRODUCTO TERMINADO' }
 };
 
