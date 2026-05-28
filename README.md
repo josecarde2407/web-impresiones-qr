@@ -14,7 +14,7 @@ Sistema web para generar e imprimir etiquetas QR directamente en impresoras Zebr
 - ✅ Interfaz moderna y responsive
 - ✅ Modo oscuro / claro
 - ✅ Validación de ubicaciones
-- ✅ Compatible con red local Zebra (Puerto 9100)
+- ✅ Compatible con red local Zebra (Puerto local)
 
 ---
 
