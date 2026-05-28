@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Admin Ubicaciones</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./css/stylesadmin.css" />
+</head>
+
+<body>
+
+    <div class="header" style="display:flex;justify-content:space-between;align-items:center;">
+        <div>Admin de Ubicaciones</div>
+
+        <div style="display:flex;gap:10px;">
+            <button onclick="goPrint()" style="
+                background:white;
+                color:#1f4b99;
+                border:none;
+                padding:6px 12px;
+                border-radius:6px;
+                cursor:pointer;
+                font-weight:bold;">
+                🖨️ Impresión
+            </button>
+
+            <button onclick="location.reload()" style="
+                background:#e5e7eb;
+                border:none;
+                padding:6px 12px;
+                border-radius:6px;
+                cursor:pointer;">
+                🔄 Recargar
+            </button>
+        </div>
+    </div>
+
+    <div class="container">
+
+        <!-- 🔥 LAYOUT PRINCIPAL 2 COLUMNAS -->
+        <div class="layout-top">
+
+            <!-- IMPRESORAS -->
+            <div class="printer-box">
+                <h3>🖨️ Configuración de Impresoras</h3>
+
+                <label>Tipo de impresora</label>
+                <select id="printerKey">
+                    <option value="recepcion">Recepción</option>
+                    <option value="pt">Producto Terminado</option>
+                </select>
+
+                <hr />
+
+                <div class="printer-grid">
+
+                    <div class="field">
+                        <label>IP de impresora</label>
+                        <input id="ip" placeholder="10.155.158.38" />
+                    </div>
+
+                    <div class="field">
+                        <label>Puerto</label>
+                        <input id="port" value="9100" />
+                    </div>
+
+                    <div class="field">
+                        <label>Nombre</label>
+                        <input id="nombre" placeholder="RECEPCIÓN PRINCIPAL" />
+                    </div>
+
+                </div>
+
+                <button onclick="updatePrinter()">💾 Actualizar configuración</button>
+            </div>
+
+            <!-- CREAR UBICACIÓN -->
+            <div class="card form-card">
+                <h3>➕ Crear ubicación</h3>
+
+                <form id="form" class="form-section">
+
+                    <!-- GRID DE CAMPOS -->
+                    <div class="form-grid compact">
+                        <input class="input" placeholder="Almacén (L1)" id="almacen" maxlength="2" required />
+                        <input class="input" placeholder="MP (MP1)" id="mp" maxlength="3" required />
+                        <input class="input" placeholder="Rack (001)" id="rack" maxlength="3" required />
+                        <input class="input" placeholder="Pos (001)" id="pos" maxlength="3" required />
+                        <input class="input" placeholder="Nivel (001)" id="nivel" maxlength="3" required />
+                        <input class="input" placeholder="Prof (001)" id="prof" maxlength="3" required />
+                    </div>
+
+                    <!-- ACCIONES -->
+                    <div class="form-actions">
+                        <button class="btn-primary" type="submit">Agregar ubicación</button>
+                        <button class="btn-secondary" type="reset">Limpiar</button>
+                    </div>
+
+                </form>
+
+                <!-- IMPORTACIÓN -->
+                <div class="upload-section">
+                    <input type="file" id="fileExcel" />
+
+                    <button class="btn-primary" onclick="uploadExcel()">
+                        Importar Excel
+                    </button>
+
+                    <!-- AVISO -->
+                    <div class="excel-info">
+                        <h4>Formato requerido del Excel</h4>
+
+                        <p>El archivo debe contener exactamente estos encabezados:</p>
+
+                        <div class="columns">
+                            <span>ALMACEN</span>
+                            <span>MATERIAL</span>
+                            <span>RACK</span>
+                            <span>POSICION</span>
+                            <span>NIVEL</span>
+                            <span>PROFUNDIDAD</span>
+                        </div>
+
+                        <small>
+                            Importante: No modificar nombres de columnas,
+                            espacios ni formatos.
+                        </small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABLA -->
+        <div class="card">
+            <div class="table-header">
+                <div>
+                    <h3>📦 Ubicaciones registradas <span class="badge" id="count"></span></h3>
+                </div>
+                <div class="table-controls">
+                    <input type="text" id="searchInput" class="search-input" placeholder="🔍 Buscar ubicación..." />
+                    <button onclick="exportToCSV()" class="btn-secondary">📥 Exportar</button>
+                </div>
+            </div>
+
+            <table>
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Ubicación</th>
+                        <th style="width:200px;">Acciones</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody"></tbody>
+            </table>
+        </div>
+
+        <!-- MODAL EDITAR -->
+        <div id="editModal" class="modal">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h3>✏️ Editar ubicación</h3>
+                    <button class="close-btn" onclick="closeEditModal()">✕</button>
+                </div>
+
+                <form id="editForm" class="modal-form">
+                    <div class="form-grid">
+                        <div class="form-group">
+                            <label>Almacén</label>
+                            <input type="text" id="editAlmacen" maxlength="2" required />
+                        </div>
+                        <div class="form-group">
+                            <label>MP</label>
+                            <input type="text" id="editMp" maxlength="3" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Rack</label>
+                            <input type="text" id="editRack" maxlength="3" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Pos</label>
+                            <input type="text" id="editPos" maxlength="3" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Nivel</label>
+                            <input type="text" id="editNivel" maxlength="3" required />
+                        </div>
+                        <div class="form-group">
+                            <label>Prof</label>
+                            <input type="text" id="editProf" maxlength="3" required />
+                        </div>
+                    </div>
+
+                    <div class="modal-actions">
+                        <button type="submit" class="btn-primary">Guardar cambios</button>
+                        <button type="button" class="btn-secondary" onclick="closeEditModal()">Cancelar</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div id="toast" class="toast"></div>
+
+        <div id="confirmModal" class="confirm-modal">
+            <div class="confirm-box">
+                <h3>Eliminar ubicación</h3>
+                <p>¿Deseas continuar?</p>
+
+                <div class="confirm-actions">
+                    <button class="btn-secondary" onclick="closeConfirm()">
+                        Cancelar
+                    </button>
+
+                    <button class="btn-danger-sm" id="confirmDeleteBtn">
+                        Eliminar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div> <!-- FIN CONTAINER -->
+
+    <footer class="footer">
+        <div class="footer-content">
+            <span>Sistema de Impresión QR</span>
+
+            <span>
+                Desarrollado por
+                <strong>JoseDev</strong> © 2026 |
+                <a href="https://github.com/josecarde2407" target="_blank" class="github-link">
+                    <img src="/assets/github.svg" alt="GitHub"
+                        style="width:14px;vertical-align:middle;margin-right:4px;">
+                    GitHub
+                </a>
+            </span>
+        </div>
+    </footer>
+
+    <script src="./js/admin.js"></script>
+
+</body>
+
+</html>

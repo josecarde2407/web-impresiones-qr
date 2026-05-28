@@ -1,0 +1,12 @@
+{
+  "recepcion": {
+    "ip": "192.1681.1",
+    "port": 4321,
+    "nombre": "RECEPCIÓN"
+  },
+  "pt": {
+    "ip": "192.168.1.2",
+    "port": 1234,
+    "nombre": "PRODUCTO TERMINADO"
+  }
+}

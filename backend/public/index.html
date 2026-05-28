@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sistema de Impresión QR - Almacén</title>
+    <link rel="icon" href="/assets/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/assets/logo.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="./css/styles.css">
+</head>
+
+<body>
+
+    <div id="toast"></div>
+    <button class="mode-toggle" style="right:75px;background:#4a90e2;color:#fff;" onclick="openAdminModal()">
+        <img src="/assets/admin.svg" alt="tema" style="width:18px;height:18px;">
+    </button>
+    <h1>Sistema de Impresión QR</h1>
+    <div class="version">v6.0 | Edición Segura (Backend-Only)</div>
+
+    <div class="card">
+        <span class="card-title">Destino de Impresión</span>
+        <div class="radio-group">
+            <label class="radio-card">
+                <input type="radio" name="printer" value="recepcion" checked>
+                <span class="radio-content"><img src="/assets/imprecep.svg" alt="tema" style="width:18px;height:18px;">
+                    RECEPCIÓN</span>
+            </label>
+            <label class="radio-card">
+                <input type="radio" name="printer" value="pt">
+                <span class="radio-content"><img src="/assets/impdesp.svg" alt="tema" style="width:18px;height:18px;">
+                    PT</span>
+            </label>
+        </div>
+
+        <hr>
+
+        <label style="display:block;margin-bottom:8px;font-weight:600;font-size:0.9rem;">Código de Ubicación</label>
+        <input type="text" id="textInput" class="text-input" placeholder="L1-MP1-RCK-POS-NIV-PROF" autocomplete="off">
+        <button class="btn btn-print" id="btnIndividual" onclick="printQR()">IMPRIMIR AHORA</button>
+
+        <hr>
+
+        <span class="card-title">Selección por Lotes</span>
+        <label style="display:block;margin-bottom:8px;font-weight:600;font-size:0.9rem;">Rack</label>
+        <select id="rackSelect" class="text-input">
+            <option value="">-- Seleccionar rack --</option>
+        </select>
+
+        <label style="display:block;margin-bottom:8px;font-weight:600;font-size:0.9rem;">Sección</label>
+        <select id="sectionSelect" class="text-input">
+            <option value="">-- Seleccionar sección --</option>
+        </select>
+
+        <div style="display: flex; gap: 12px; margin-top: 10px;">
+            <button class="btn btn-clear" onclick="clearField()" style="flex: 1;">LIMPIAR</button>
+            <button class="btn btn-batch" onclick="imprimirSeccion()" style="flex: 2;">IMPRIMIR LOTE</button>
+        </div>
+
+        <div id="statusMessage" class="status"></div>
+    </div>
+    <div id="adminModal" style="
+    display:none;
+    position:fixed;
+    inset:0;
+    background:rgba(0,0,0,0.6);
+    justify-content:center;
+    align-items:center;
+    z-index:9999;
+">
+
+        <div style="
+        background:var(--card);
+        padding:25px;
+        border-radius:12px;
+        width:300px;
+        border:1px solid var(--border);
+    ">
+
+            <h3 style="margin-top:0;color:var(--primary)">Acceso Administrador</h3>
+
+            <input id="adminPass" type="password" placeholder="Contraseña"
+                style="width:100%;padding:12px;border-radius:8px;border:1px solid var(--border);margin-top:10px;" />
+
+            <div style="display:flex;gap:10px;margin-top:15px;">
+                <button onclick="validateAdmin()" class="btn btn-print" style="flex:1;">
+                    Entrar
+                </button>
+
+                <button onclick="closeAdminModal()" class="btn btn-clear" style="flex:1;">
+                    Cancelar
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <footer class="footer">
+        <div class="footer-content">
+            <span>Sistema de Impresión QR</span>
+
+            <span>
+                Desarrollado por
+                <strong>JoseDev</strong> © 2026 |
+                <a href="https://github.com/josecarde2407" target="_blank" class="github-link">
+                    <img src="/assets/github.svg" alt="GitHub"
+                        style="width:14px;vertical-align:middle;margin-right:4px;">
+                    GitHub
+                </a>
+            </span>
+        </div>
+    </footer>
+
+    <script src="./js/index.js"></script>
+</body>
+
+
+</html>

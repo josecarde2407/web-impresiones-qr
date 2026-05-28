@@ -1,0 +1,625 @@
+:root {
+    --bg: #f4f6f9;
+    --card: #ffffff;
+    --primary: #1f4b99;
+    --accent: #4a90e2;
+    --danger: #e74c3c;
+    --text: #1c1c1c;
+    --muted: #6b7280;
+    --border: #e5e7eb;
+}
+
+/* BASE */
+html,
+body {
+    height: 100%;
+    box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+    box-sizing: inherit;
+}
+
+body {
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    font-family: "Segoe UI", Arial, sans-serif;
+    background: var(--bg);
+    color: var(--text);
+}
+
+/* HEADER */
+.header {
+    background: var(--primary);
+    color: white;
+    padding: 14px 18px;
+    font-size: 16px;
+    font-weight: 600;
+}
+
+/* CONTENEDOR */
+.container {
+    padding: 16px;
+    width: 100%;
+    max-width: 1200px;
+
+    margin-left: auto;
+    margin-right: auto;
+
+    flex: 1;
+
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+/* =========================
+   LAYOUT PRINCIPAL
+========================= */
+.layout-top {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    align-items: stretch;
+}
+
+/* =========================
+   CARDS BASE
+========================= */
+.card,
+.printer-box {
+    background: var(--card);
+    border-radius: 12px;
+    padding: 14px;
+    border: 1px solid var(--border);
+    display: flex;
+    flex-direction: column;
+    transition: all 0.2s ease;
+}
+
+.card:hover,
+.printer-box:hover {
+    box-shadow: 0 6px 18px rgba(0, 0, 0, 0.08);
+}
+
+/* TITULOS */
+.card h3,
+.printer-box h3 {
+    margin: 0 0 8px 0;
+    font-size: 15px;
+    color: var(--primary);
+}
+
+/* =========================
+   FORMULARIO
+========================= */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 8px;
+}
+
+/* INPUTS */
+.input,
+.printer-box input,
+.printer-box select {
+    width: 100%;
+    padding: 8px 10px;
+    border-radius: 8px;
+    border: 1px solid var(--border);
+    font-size: 13px;
+    outline: none;
+    background: #fff;
+    transition: border 0.2s ease;
+    box-sizing: border-box;
+}
+
+.input:focus,
+.printer-box input:focus,
+.printer-box select:focus {
+    border-color: var(--accent);
+}
+
+/* =========================
+   BOTONES
+========================= */
+button {
+    padding: 8px 12px;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    font-size: 13px;
+}
+
+.btn-primary {
+    background: var(--accent);
+    color: white;
+}
+
+.btn-primary:hover {
+    background: #2f7fe6;
+}
+
+.btn-danger {
+    background: var(--danger);
+    color: white;
+}
+
+.btn-secondary {
+    background: #e5e7eb;
+    color: var(--text);
+}
+
+.form-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 10px;
+}
+
+/* =========================
+   IMPRESORAS
+========================= */
+.printer-grid {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 8px;
+    margin-top: 6px;
+}
+
+.field {
+    display: flex;
+    flex-direction: column;
+}
+
+.field label {
+    font-size: 10px;
+    color: var(--muted);
+    margin-bottom: 3px;
+}
+
+/* BOTÓN IMPRESORA */
+.printer-box button {
+    margin-top: 8px;
+    width: 100%;
+    padding: 8px;
+    background: var(--primary);
+    color: white;
+    border-radius: 8px;
+}
+
+.printer-box button:hover {
+    background: #163a77;
+}
+
+/* =========================
+   TABLA
+========================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+th {
+    text-align: left;
+    background: #f1f5f9;
+    padding: 8px;
+    font-size: 12px;
+    color: var(--muted);
+}
+
+td {
+    padding: 8px;
+    border-bottom: 1px solid var(--border);
+    font-size: 13px;
+}
+
+tr:hover {
+    background: #f9fafb;
+}
+
+/* =========================
+   UTILIDADES
+========================= */
+.upload-section {
+    display: flex;
+    gap: 8px;
+    margin-top: 8px;
+}
+
+#fileExcel {
+    padding: 6px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    flex: 1;
+    font-size: 12px;
+    box-sizing: border-box;
+    width: 100%;
+}
+
+.badge {
+    padding: 3px 8px;
+    border-radius: 6px;
+    font-size: 11px;
+    background: #eef2ff;
+    color: var(--primary);
+}
+
+/* =========================
+   TABLA MEJORADA
+========================= */
+.table-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: 10px;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.table-header h3 {
+    margin: 0;
+}
+
+.table-controls {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+}
+
+.search-input {
+    padding: 6px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+    min-width: 200px;
+    box-sizing: border-box;
+}
+
+.search-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 2px rgba(74, 144, 226, 0.1);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+}
+
+.btn-copy,
+.btn-edit,
+.btn-danger-sm {
+    padding: 5px 8px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 11px;
+    transition: all 0.2s ease;
+    background: #f0f0f0;
+}
+
+.btn-copy:hover {
+    background: #e0e0e0;
+}
+
+.btn-edit {
+    background: #dbeafe;
+}
+
+.btn-edit:hover {
+    background: #bfdbfe;
+}
+
+.btn-danger-sm {
+    background: #fee2e2;
+}
+
+.btn-danger-sm:hover {
+    background: #fecaca;
+}
+
+/* =========================
+   MODAL
+========================= */
+.modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal.show {
+    display: flex;
+}
+
+.modal-content {
+    background: white;
+    border-radius: 12px;
+    padding: 18px;
+    max-width: 500px;
+    width: 90%;
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+}
+
+.modal-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 12px;
+}
+
+.modal-header h3 {
+    margin: 0;
+    font-size: 16px;
+    color: var(--primary);
+}
+
+.close-btn {
+    background: none;
+    border: none;
+    font-size: 24px;
+    cursor: pointer;
+    color: var(--muted);
+    transition: color 0.2s ease;
+}
+
+.close-btn:hover {
+    color: var(--text);
+}
+
+.modal-form {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+}
+
+.form-group label {
+    font-size: 11px;
+    color: var(--muted);
+    margin-bottom: 3px;
+    font-weight: 600;
+}
+
+.form-group input {
+    padding: 8px 10px;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+    outline: none;
+    transition: border 0.2s ease;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.form-group input:focus {
+    border-color: var(--accent);
+}
+
+.modal-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.modal-actions button {
+    flex: 1;
+    padding: 8px 10px;
+}
+
+/* =========================
+   UTILIDADES
+========================= */
+.upload-section {
+    display: flex;
+    gap: 10px;
+    margin-top: 12px;
+}
+
+#fileExcel {
+    padding: 8px;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    flex: 1;
+}
+
+.btn-secondary:hover {
+    background: #d1d5db;
+}
+
+.upload-section {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-bottom: 12px;
+}
+
+.excel-info {
+    background: #f5f7fb;
+    border-left: 4px solid #2563eb;
+    padding: 15px;
+    border-radius: 10px;
+}
+
+.excel-info h4 {
+    margin: 0 0 10px;
+    color: #1e3a8a;
+    font-size: 15px;
+}
+
+.excel-info p {
+    margin: 0 0 10px;
+    font-size: 10px;
+    color: #444;
+}
+
+.columns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-bottom: 10px;
+}
+
+.columns span {
+    background: #dbeafe;
+    color: #1d4ed8;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 10px;
+    font-weight: 600;
+}
+
+.excel-info small {
+    color: #666;
+    font-size: 10px;
+}
+
+.toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #111827;
+    color: white;
+    padding: 10px 16px;
+    border-radius: 10px;
+    font-size: 13px;
+    font-weight: 500;
+    opacity: 0;
+    transform: translateY(10px);
+    transition: all .25s ease;
+    pointer-events: none;
+    z-index: 9999;
+}
+
+.toast.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.confirm-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, .35);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    opacity: 0;
+    pointer-events: none;
+    transition: .2s ease;
+    z-index: 9998;
+}
+
+.confirm-modal.show {
+    opacity: 1;
+    pointer-events: all;
+}
+
+.confirm-box {
+    background: white;
+    width: 320px;
+    border-radius: 16px;
+    padding: 24px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, .15);
+}
+
+.confirm-box h3 {
+    margin: 0 0 10px;
+    font-size: 18px;
+}
+
+.confirm-box p {
+    color: #666;
+    margin-bottom: 20px;
+}
+
+.confirm-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+/* FOOTER */
+.footer {
+    margin-top: auto;
+    width: 100%;
+    border-top: 1px solid var(--border);
+    background: #ffffff;
+    padding: 5px 20px;
+    box-sizing: border-box;
+}
+
+.footer-content {
+    max-width: 1100px;
+    margin: auto;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 0.85rem;
+    color: var(--muted);
+}
+
+.footer strong {
+    color: var(--primary);
+}
+
+.github-link {
+    color: var(--accent);
+    text-decoration: none;
+    font-weight: 600;
+    margin-left: 5px;
+    transition: 0.2s ease;
+}
+
+.github-link:hover {
+    color: var(--primary);
+    text-decoration: underline;
+}
+
+/* RESPONSIVE */
+@media (max-width: 900px) {
+    .layout-top {
+        grid-template-columns: 1fr;
+    }
+
+    .form-grid {
+        grid-template-columns: 1fr;
+    }
+
+    .table-header {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .table-controls {
+        flex-direction: column;
+    }
+
+    .search-input {
+        min-width: auto;
+        width: 100%;
+    }
+
+    .action-buttons {
+        justify-content: flex-start;
+    }
+
+    .modal-content {
+        max-width: 90%;
+    }
+}
