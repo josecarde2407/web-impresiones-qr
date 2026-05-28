@@ -1,45 +1,130 @@
-# Web Impresiones QR
+# 🖨️ Web Impresiones QR
 
-Aplicación web para generar códigos QR a partir de texto ingresado por el usuario e imprimirlos directamente en una impresora Zebra en la red local.
+Sistema web para generar e imprimir etiquetas QR directamente en impresoras Zebra conectadas en red local.
 
-## Instalación
+---
 
-1. Clona o descarga el proyecto.
-2. Ejecuta `npm install` para instalar las dependencias.
+# ✨ Características
 
-## Uso
+- ✅ Generación de códigos QR
+- ✅ Impresión directa a impresoras Zebra
+- ✅ Gestión de múltiples impresoras
+- ✅ Configuración dinámica desde panel administrador
+- ✅ Impresión individual y por lotes
+- ✅ Interfaz moderna y responsive
+- ✅ Modo oscuro / claro
+- ✅ Validación de ubicaciones
+- ✅ Compatible con red local Zebra (Puerto 9100)
 
-1. Ejecuta `npm start` para iniciar el servidor.
-2. Abre tu navegador en `http://localhost:3000`.
-3. Ingresa el texto en el campo y haz clic en "Generar QR" para ver el código QR.
-4. Haz clic en "Imprimir" para enviar el QR a la impresora Zebra.
+---
 
-## Configuración de la Impresora
+# 📦 Tecnologías Utilizadas
 
-- En `server.js`, cambia la variable `printerIP` a la dirección IP real de tu impresora Zebra.
-- Asegúrate de que la impresora esté en la misma red y accesible en el puerto 9100 (puerto estándar para impresoras Zebra).
+| Tecnología | Descripción |
+|---|---|
+| Node.js | Entorno backend |
+| Express | Framework servidor |
+| QRCode | Generación de QR |
+| HTML/CSS/JS | Frontend |
+| Zebra ZPL | Lenguaje de impresión |
 
-## Solución de Problemas
+---
 
-- Si hay errores de conexión con la impresora, verifica la IP y el puerto.
-- Asegúrate de que Node.js esté instalado y npm funcione correctamente.
-- Para desarrollo, usa `npm run dev` con nodemon.
+# 📁 Estructura del Proyecto
 
-## Dependencias
+```txt
+web-impresiones-qr/
+│
+├── backend/
+├── frontend/
+├── docs/
+├── README.md
+└── Procfile
+```
 
-- Express: Framework web para Node.js.
+---
 
-- QRCode: Librería para generar códigos QR en el cliente.
+# ⚙️ Instalación
 
-## Actualizacion 
-- Visual se modifico añadiendo radio button , modo oscuro / claro , adicional de una impresora de otra zona, tambien se agrego un variable para agregar mas impresoras desde el server.js segun requiera el usuario.
+## 1. Clonar proyecto
 
-## cd "C:\Users\dstef\Downloads\web-impresiones-qr-main"
- npm install
- node server.js
- 
+```bash
+git clone https://github.com/tu-repo/web-impresiones-qr.git
+```
 
+## 2. Entrar al proyecto
 
+```bash
+cd web-impresiones-qr
+```
 
+## 3. Instalar dependencias
 
+```bash
+npm install
+```
 
+---
+
+# 🚀 Ejecución
+
+## Producción
+
+```bash
+npm start
+```
+
+## Desarrollo
+
+```bash
+npm run dev
+```
+
+---
+
+# 🌐 Acceso al Sistema
+
+```txt
+http://localhost:3000
+```
+
+---
+
+# 🖨️ Configuración de Impresoras
+
+Editar:
+
+```txt
+backend/src/config/printers.json
+```
+
+Ejemplo:
+
+```json
+{
+  "recepcion": {
+    "ip": "10.155.158.38",
+    "port": 9100,
+    "nombre": "RECEPCION"
+  }
+}
+```
+
+---
+
+# 📋 Funcionalidades
+
+- Impresión individual
+- Impresión masiva
+- Gestión de impresoras
+- Importación Excel
+- Panel administrador
+
+---
+
+# 👨‍💻 Autor
+
+**JoseDev** © 2026
+
+GitHub:
+https://github.com/josecarde2407
