@@ -103,8 +103,8 @@ Ejemplo:
 ```json
 {
   "recepcion": {
-    "ip": "10.155.158.38",
-    "port": 9100,
+    "ip": "192.168.1.1",
+    "port": 1234,
     "nombre": "RECEPCION"
   }
 }
