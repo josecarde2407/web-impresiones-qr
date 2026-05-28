@@ -118,7 +118,7 @@ Ejemplo:
 - Impresión masiva
 - Gestión de impresoras
 - Importación Excel
-- Panel administrador
+- Panel administrador Contraseña 1234
 
 ---
 
